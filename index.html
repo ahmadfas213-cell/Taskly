@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#090a0f">
+    <meta name="description" content="Taskly - Simple productivity app">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Taskly</title>
+</head>
+
+<body>
+
+<div class="ambient">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+</div>
+
+<div class="app-shell">
+
+    <aside class="sidebar glass">
+
+        <div class="brand">
+            <div class="brand-icon">✓</div>
+            <span>taskly</span>
+        </div>
+
+        <nav>
+            <button class="nav-item active" data-page="today">
+                <span>◷</span>
+                Today
+            </button>
+
+            <button class="nav-item" data-page="all">
+                <span>☷</span>
+                All Tasks
+            </button>
+
+            <button class="nav-item" data-page="completed">
+                <span>✓</span>
+                Completed
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button id="installBtn" class="install-btn">
+                <span>↓</span>
+                Install App
+            </button>
+
+            <div class="mini-profile">
+                <div class="avatar">N</div>
+
+                <div>
+                    <strong>My Workspace</strong>
+                    <small>Personal</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="mobile-header">
+
+            <div class="brand">
+                <div class="brand-icon">✓</div>
+                <span>taskly</span>
+            </div>
+
+            <button id="mobileAdd" class="mobile-add">+</button>
+
+        </header>
+
+
+        <section class="top-section">
+
+            <div>
+                <span class="eyebrow">PRODUCTIVITY</span>
+
+                <h1 id="greeting">
+                    Good evening.
+                </h1>
+
+                <p id="dateText">
+                    Loading date...
+                </p>
+            </div>
+
+            <button id="desktopAdd" class="add-main">
+                <span>+</span>
+                Add Task
+            </button>
+
+        </section>
+
+
+        <section class="overview">
+
+            <div class="overview-main glass">
+
+                <div class="overview-info">
+
+                    <span class="label">
+                        TODAY'S PROGRESS
+                    </span>
+
+                    <div class="percentage">
+                        <span id="progressPercent">0</span>%
+                    </div>
+
+                    <p>
+                        <span id="completedText">0</span>
+                        of
+                        <span id="totalText">0</span>
+                        tasks completed
+                    </p>
+
+                </div>
+
+                <div class="progress-ring">
+                    <svg viewBox="0 0 120 120">
+
+                        <circle
+                            class="ring-bg"
+                            cx="60"
+                            cy="60"
+                            r="48"
+                        />
+
+                        <circle
+                            id="ringProgress"
+                            class="ring-progress"
+                            cx="60"
+                            cy="60"
+                            r="48"
+                        />
+
+                    </svg>
+
+                    <span id="ringNumber">0%</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card glass">
+
+                <span class="label">
+                    REMAINING
+                </span>
+
+                <strong id="remainingText">
+                    0
+                </strong>
+
+                <small>
+                    tasks left
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <section class="task-section">
+
+            <div class="section-head">
+
+                <div>
+                    <span class="label">
+                        YOUR TASKS
+                    </span>
+
+                    <h2 id="pageTitle">
+                        Today
+                    </h2>
+                </div>
+
+                <div class="actions">
+
+                    <div class="search-box">
+                        <span>⌕</span>
+
+                        <input
+                            id="searchInput"
+                            type="text"
+                            placeholder="Search"
+                        >
+                    </div>
+
+                    <select id="priorityFilter">
+                        <option value="all">All</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div id="taskList" class="task-list"></div>
+
+
+            <div id="emptyState" class="empty glass">
+
+                <div class="empty-icon">
+                    ✓
+                </div>
+
+                <h3 id="emptyTitle">
+                    Nothing here.
+                </h3>
+
+                <p id="emptyText">
+                    Add a task and get things moving.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<div id="modal" class="modal">
+
+    <div class="modal-backdrop"></div>
+
+    <div class="modal-box glass">
+
+        <div class="modal-head">
+
+            <div>
+                <span class="label">NEW TASK</span>
+                <h2>Create a task</h2>
+            </div>
+
+            <button id="closeModal" class="close">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="taskForm">
+
+            <label>
+                Task name
+
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="What needs to be done?"
+                    required
+                >
+            </label>
+
+
+            <div class="form-grid">
+
+                <label>
+                    Priority
+
+                    <select id="priorityInput">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </label>
+
+                <label>
+                    Deadline
+
+                    <input
+                        id="deadlineInput"
+                        type="date"
+                    >
+                </label>
+
+            </div>
+
+
+            <button class="submit-btn" type="submit">
+                Create Task
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
