@@ -1,10 +1,11 @@
-const CACHE_NAME = "taskly-v1";
+const CACHE_NAME = "taskly-v2";
 
 const FILES = [
     "./",
     "./index.html",
     "./style.css",
     "./script.js",
+    "./features.js",
     "./manifest.json"
 ];
 
