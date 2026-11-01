@@ -1,4 +1,4 @@
-const CACHE_NAME = "taskly-v3";
+const CACHE_NAME = "taskly-v4";
 
 const FILES = [
     "./",

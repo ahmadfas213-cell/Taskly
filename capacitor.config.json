@@ -1,0 +1,9 @@
+{
+  "appId": "id.norexa.taskly",
+  "appName": "Taskly",
+  "webDir": "www",
+  "backgroundColor": "#08090d",
+  "android": {
+    "allowMixedContent": false
+  }
+}

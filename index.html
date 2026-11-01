@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="theme-color" content="#090a0f">
-    <meta name="description" content="Taskly - Simple productivity app">
+    <meta name="description" content="Taskly - Glassy productivity workspace">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 
-    <title>Taskly</title>
+    <title>Taskly | Glassy Workspace</title>
 </head>
 
 <body>
@@ -90,11 +93,18 @@
 
         <nav class="mobile-nav" aria-label="Main navigation">
             <button class="nav-item active" data-page="today"><span>◷</span><small>Today</small></button>
-            <button class="nav-item" data-page="all"><span>☷</span><small>Tasks</small></button>
+            <button class="nav-item" data-page="all"><span>☷</span><small>All Tasks</small></button>
+            <button class="nav-item" data-page="completed"><span>✓</span><small>Completed</small></button>
             <button class="nav-item" data-feature="upcoming"><span>⌛</span><small>Upcoming</small></button>
             <button class="nav-item" data-feature="calendar"><span>▦</span><small>Calendar</small></button>
+            <button class="nav-item" data-feature="board"><span>▤</span><small>Kanban</small></button>
+            <button class="nav-item" data-feature="habits"><span>↗</span><small>Habits</small></button>
+            <button class="nav-item" data-feature="focus"><span>◷</span><small>Focus</small></button>
+            <button class="nav-item" data-feature="analytics"><span>⌁</span><small>Analytics</small></button>
+            <button class="nav-item" data-feature="notes"><span>▧</span><small>Notes</small></button>
+            <button class="nav-item" data-feature="templates"><span>✦</span><small>Templates</small></button>
             <button class="nav-item" data-feature="weekly"><span>◎</span><small>Goals</small></button>
-            <button class="nav-item" data-feature="settings"><span>⚙</span><small>More</small></button>
+            <button class="nav-item" data-feature="settings"><span>⚙</span><small>Settings</small></button>
         </nav>
 
 
