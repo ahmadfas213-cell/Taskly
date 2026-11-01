@@ -142,6 +142,12 @@ taskForm.addEventListener("submit", function(event) {
 
 function deleteTask(id) {
 
+    const removed = tasks.find(task => task.id === id);
+    if (removed) {
+        const trash = JSON.parse(localStorage.getItem("taskly_trash") || "[]");
+        trash.push(removed);
+        localStorage.setItem("taskly_trash", JSON.stringify(trash));
+    }
     tasks = tasks.filter(task => task.id !== id);
 
     saveTasks();
