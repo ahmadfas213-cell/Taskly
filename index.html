@@ -40,10 +40,15 @@
                 All Tasks
             </button>
 
-            <button class="nav-item" data-page="completed">
-                <span>✓</span>
-                Completed
-            </button>
+            <button class="nav-item" data-page="completed"><span>✓</span>Completed</button>
+            <div class="nav-divider">WORKSPACE</div>
+            <button class="nav-item feature-nav" data-feature="calendar"><span>▦</span>Calendar</button>
+            <button class="nav-item feature-nav" data-feature="board"><span>▤</span>Kanban Board</button>
+            <button class="nav-item feature-nav" data-feature="habits"><span>↗</span>Habit Tracker</button>
+            <button class="nav-item feature-nav" data-feature="focus"><span>◷</span>Focus Mode</button>
+            <button class="nav-item feature-nav" data-feature="analytics"><span>⌁</span>Analytics</button>
+            <button class="nav-item feature-nav" data-feature="notes"><span>▧</span>Notes</button>
+            <button class="nav-item feature-nav" data-feature="settings"><span>⚙</span>Settings & Backup</button>
         </nav>
 
         <div class="sidebar-bottom">
@@ -230,6 +235,8 @@
 
         </section>
 
+        <section id="featurePanel" class="feature-panel" hidden></section>
+
     </main>
 
 </div>
@@ -305,6 +312,7 @@
 
 
 <script src="script.js"></script>
+<script src="features.js"></script>
 
 </body>
 </html>
