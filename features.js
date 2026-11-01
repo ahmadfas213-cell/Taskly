@@ -8,7 +8,7 @@ let timerSeconds = 25*60, timerRunning = false, timerInterval = null;
 let focusSessions = store("taskly_focus_sessions",0);
 let xp = store("taskly_xp",0);
 const panel = $("#featurePanel"), taskSection = $(".task-section");
-const pages = {calendar:"Calendar",board:"Kanban Board",habits:"Habit Tracker",focus:"Focus Mode",analytics:"Analytics",notes:"Notes",settings:"Settings & Backup"};
+const pages = {calendar:"Calendar",board:"Kanban Board",habits:"Habit Tracker",focus:"Focus Mode",analytics:"Analytics",notes:"Notes",settings:"Settings & Backup",upcoming:"Upcoming",templates:"Task Templates",weekly:"Weekly Goals"};
 function shell(title,body){panel.innerHTML='<div class="feature-heading"><div><span class="label">TASKLY WORKSPACE</span><h2>'+title+'</h2></div><span class="feature-muted">Your productivity, in one place</span></div>'+body;}
 function showFeature(name){
  document.querySelectorAll(".nav-item").forEach(x=>x.classList.remove("active"));
@@ -29,6 +29,9 @@ function renderFeature(name){
  if(name==="analytics")return analytics();
  if(name==="notes")return notesView();
  if(name==="settings")return settingsView();
+ if(name==="upcoming")return upcomingView();
+ if(name==="templates")return templatesView();
+ if(name==="weekly")return weeklyView();
 }
 function calendar(){
  const date=new Date();date.setDate(1);date.setMonth(date.getMonth()+monthOffset);
@@ -76,6 +79,24 @@ function settingsView(){
  $("#exportData").onclick=()=>{const data={tasks,habits,notes,xp,focusSessions,exportedAt:new Date().toISOString()};const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download="taskly-backup.json";a.click();URL.revokeObjectURL(a.href)};
  $("#importData").onchange=async e=>{try{const data=JSON.parse(await e.target.files[0].text());if(!Array.isArray(data.tasks))throw Error();localStorage.setItem("taskly_tasks",JSON.stringify(data.tasks));localStorage.setItem("taskly_habits",JSON.stringify(Array.isArray(data.habits)?data.habits:[]));localStorage.setItem("taskly_notes",data.notes||"");localStorage.setItem("taskly_xp",data.xp||0);localStorage.setItem("taskly_focus_sessions",data.focusSessions||0);alert("Backup restored. Reloading.");location.reload()}catch{alert("File backup tidak valid.")}};
  $("#enableNotifications").onclick=async()=>{if(!("Notification"in window)){alert("Browser ini tidak mendukung notifikasi.");return}const p=await Notification.requestPermission();alert(p==="granted"?"Notifications enabled.":"Notification permission was not granted.")};
+}
+function upcomingView(){
+ const list=tasks.filter(t=>!t.completed&&t.deadline).sort((a,b)=>a.deadline.localeCompare(b.deadline));
+ const today=new Date().toISOString().slice(0,10);
+ const rows=list.map(t=>'<div class="feature-item"><div><b>'+escapeText(t.title)+'</b><br><small>'+t.deadline+' · '+escapeText(t.priority)+'</small></div><span class="due-badge '+(t.deadline<today?'overdue':t.deadline===today?'due-today':'')+'">'+(t.deadline<today?'Overdue':t.deadline===today?'Today':'Upcoming')+'</span></div>').join("");
+ shell("Upcoming Tasks",'<div class="feature-card"><div class="feature-row" style="justify-content:space-between"><b>'+list.length+' scheduled tasks</b><span class="feature-muted">Sorted by deadline</span></div><div class="feature-list" style="margin-top:14px">'+(rows||'<p class="feature-muted">No upcoming deadlines. Add a deadline to a task to see it here.</p>')+'</div></div>');
+}
+function templatesView(){
+ const templates=[["Study session","Review lecture notes and complete exercises","Medium",1],["Project work","Work on the next project milestone","High",2],["Weekly planning","Review goals and plan the upcoming week","Low",0],["Deep work","Complete one important task without distractions","High",0],["Admin & errands","Handle pending messages and small tasks","Low",1]];
+ shell("Task Templates",'<div class="feature-grid">'+templates.map((t,i)=>'<div class="feature-card"><span class="label">TEMPLATE '+String(i+1).padStart(2,"0")+'</span><h3 style="margin-top:10px">'+t[0]+'</h3><p class="feature-muted">'+t[1]+'</p><button class="feature-btn primary" data-template="'+i+'">Add to tasks</button></div>').join("")+'</div><p class="feature-muted">Templates create a task with a suggested priority and deadline.</p>');
+ panel.querySelectorAll("[data-template]").forEach(b=>b.onclick=()=>{const t=templates[+b.dataset.template];const deadline=new Date();if(t[3])deadline.setDate(deadline.getDate()+t[3]);tasks.unshift({id:Date.now(),title:t[1],priority:t[2],deadline:t[3]?deadline.toISOString().slice(0,10):"",completed:false,createdAt:new Date().toISOString()});localStorage.setItem("taskly_tasks",JSON.stringify(tasks));if(typeof render==="function")render();b.textContent="Added ✓";b.disabled=true});
+}
+function weeklyView(){
+ const now=new Date(),start=new Date(now);start.setHours(0,0,0,0);start.setDate(now.getDate()-((now.getDay()+6)%7));
+ const completed=tasks.filter(t=>t.completedAt&&new Date(t.completedAt)>=start).length;
+ const goal=store("taskly_weekly_goal",10),rate=Math.min(100,Math.round(completed/goal*100));
+ shell("Weekly Goals",'<div class="feature-grid"><div class="feature-card"><span class="label">TASKS COMPLETED THIS WEEK</span><div class="stat-number">'+completed+' / '+goal+'</div><div class="progress-track" style="margin:14px 0"><span style="width:'+rate+'%"></span></div><p class="feature-muted">'+rate+'% of your weekly target</p></div><div class="feature-card"><h3>Set your target</h3><form id="weeklyGoalForm" class="feature-row"><input class="feature-input" id="weeklyGoalInput" type="number" min="1" max="200" value="'+goal+'" required><button class="feature-btn primary">Save goal</button></form><p class="feature-muted">Your goal resets each Monday. Completion tracking starts with tasks completed after this update.</p></div></div>');
+ $("#weeklyGoalForm").onsubmit=e=>{e.preventDefault();const n=Math.max(1,Math.min(200,Number($("#weeklyGoalInput").value)||10));localStorage.setItem("taskly_weekly_goal",n);weeklyView()};
 }
 function escapeText(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 if(localStorage.getItem("taskly_theme")==="light")document.body.classList.add("light");
