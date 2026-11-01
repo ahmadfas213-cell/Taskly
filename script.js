@@ -157,6 +157,7 @@ function toggleTask(id) {
     if (!task) return;
 
     task.completed = !task.completed;
+    task.completedAt = task.completed ? new Date().toISOString() : null;
 
     saveTasks();
 }
