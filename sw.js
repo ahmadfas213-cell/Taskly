@@ -1,4 +1,4 @@
-const CACHE_NAME = "taskly-v4";
+const CACHE_NAME = "taskly-v5";
 
 const FILES = [
     "./",
@@ -6,6 +6,7 @@ const FILES = [
     "./style.css",
     "./script.js",
     "./features.js",
+    "./locale.js",
     "./manifest.json"
 ];
 
