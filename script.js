@@ -331,18 +331,14 @@ function updateStats() {
 /* NAVIGATION */
 
 document
-    .querySelectorAll(".nav-item")
+    .querySelectorAll(".nav-item[data-page]")
     .forEach(button => {
 
         button.addEventListener("click", () => {
 
             document
-                .querySelectorAll(".nav-item")
-                .forEach(item =>
-                    item.classList.remove("active")
-                );
-
-            button.classList.add("active");
+                .querySelectorAll(".nav-item[data-page]")
+                .forEach(item => item.classList.toggle("active", item.dataset.page === button.dataset.page));
 
             currentPage =
                 button.dataset.page;
